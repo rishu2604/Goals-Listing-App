@@ -1,26 +1,22 @@
-// import { StatusBar } from 'expo-status-bar';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TextInput,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import { useState } from "react";
+import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
+
 export default function App() {
-  const [enteredGoal, setEnteredGoal] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
 
-  function goalInputHandler(enteredText) {
-    setEnteredGoal(enteredText);
-  }
-
-  function addGoalHandler() {
+  function addGoalHandler(enteredGoal) {
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
-      {text: enteredGoal, id: Math.random().toString()}
+      { text: enteredGoal, id: Math.random().toString() },
+      // {text: enteredGoal, key: Math.random().toString()} We can do it like this too.
+      // FlatList will automatically look for a key property
+      // FlatList does work well with primitive values like strings, but it works even better with objects that have a key property
+
+      // Now, if you don't have a property named key, because you are maybe getting data from an API and you can't influence its shape, and you don' want to transform it, just because flat list needs that key property.
+      // You also got an alternative
+      // you can use the keyExtractor prop on FlatList.
     ]);
     // setCourseGoals([...courseGoals, enteredGoal]);
     // You can do this way too, but it is not recommended by React official documentation
@@ -30,23 +26,23 @@ export default function App() {
   }
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Your course goal"
-          style={styles.textInput}
-          onChangeText={goalInputHandler}
-        />
-        <Button title="Add Goal" onPress={addGoalHandler} />
-      </View>
+      <GoalInput onAddGoal={addGoalHandler} />
       <View style={styles.goalsContainer}>
-        <FlatList data={courseGoals} renderItem={(itemData) => { // Here, itemData is an object that has a key called item, which is the item that is currently being rendered
-          return (
-            <View style={styles.goalItem}>
-              <Text style={styles.goalText}>{itemData.item.text}</Text>
-            </View>
-          )
-        }} 
-        keyExtractor={(item, index) => { return item.id }}
+        {/* We don't add key property in FlatList as we used to.
+        Instead when using FlatList there are two main ways of adding keys to these list items. 
+        The first approach is to turn your data values from primitive values like strings into objects that have a key property  */}
+        <FlatList
+          data={courseGoals}
+          renderItem={(itemData) => {
+            // Here, itemData is an object that has a key called item, which is the item that is currently being rendered
+            return <GoalItem text={itemData.item.text} />;
+          }}
+          keyExtractor={(item, index) => {
+            return item.id;
+          }}
+          // keyExtractor prop wants a function as a value, which will automatically receive two parameter values (item, index).
+          // These two values will be provided by FlatList.
+          // keyExtractor is called to get a key which then under the hood will be attached to the item that is currently being rendered.
         />
         {/* ScrollView has the job of making the content scrollable, but the area that's scrollable is in the end determined by the parent container that holds the ScrollView */}
         {/* <ScrollView>
@@ -73,34 +69,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     flex: 1,
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    width: "70%",
-    marginRight: 8,
-    padding: 8,
-  },
   goalsContainer: {
     flex: 5,
-  },
-  goalItem: {
-    margin: 8,
-    backgroundColor: "#5e0acc",
-    borderRadius: 6,
-    padding: 8,
-  },
-  goalText: {
-    color: "white",
-  },
+  }
 });
 
 // So we got our scrollable list here, and this is implemented with this ScrollView.
