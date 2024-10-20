@@ -22,7 +22,8 @@
 - For example: 
     | React Native JSX | Native Component (android) | Native Component (ios) |
     | ---------------- | -------------------------- | ---------------------- |
-    |       <View>     |         android.View       |          UIView        |
+    |    ` <View> `    |         android.View       |          UIView        |
+    | ` <TextInput> `  |         EditText           |       UITextField      |
 
 <br>
 
