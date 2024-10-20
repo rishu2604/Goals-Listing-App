@@ -20,7 +20,9 @@
 ## How does React Native works?
 - React Native maps (and compiles) re-usable components to respective platform equivalents.
 - For example: 
-![Screenshot from 2024-10-18 15-14-55](https://hackmd.io/_uploads/r1Bv0iJlyx.png)
+    | React Native JSX | Native Component (android) | Native Component (ios) |
+    | ---------------- | -------------------------- | ---------------------- |
+    |       <View>     |         android.View       |          UIView        |
 
 <br>
 
