@@ -24,6 +24,12 @@ export default function App() {
     // This is because React schedules state updates, so if you rely on the previous state, you may run into issues
     // Because React executes state in batches.
   }
+
+  function deleteGoalHandler(id) {
+    setCourseGoals((currentCourseGoals) => {
+      return currentCourseGoals.filter((goal) => goal.id !== id);
+    });
+  }
   return (
     <View style={styles.appContainer}>
       <GoalInput onAddGoal={addGoalHandler} />
@@ -35,7 +41,13 @@ export default function App() {
           data={courseGoals}
           renderItem={(itemData) => {
             // Here, itemData is an object that has a key called item, which is the item that is currently being rendered
-            return <GoalItem text={itemData.item.text} />;
+            return (
+              <GoalItem
+                text={itemData.item.text}
+                id={itemData.item.id}
+                onDeleteItem={deleteGoalHandler}
+              />
+            );
           }}
           keyExtractor={(item, index) => {
             return item.id;
@@ -71,7 +83,7 @@ const styles = StyleSheet.create({
   },
   goalsContainer: {
     flex: 5,
-  }
+  },
 });
 
 // So we got our scrollable list here, and this is implemented with this ScrollView.
