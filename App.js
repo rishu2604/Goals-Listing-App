@@ -103,8 +103,7 @@ const styles = StyleSheet.create({
   },
   goalsContainer: {
     flex: 5,
-  },
-  },
+  }
 });
 
 // So we got our scrollable list here, and this is implemented with this ScrollView.
